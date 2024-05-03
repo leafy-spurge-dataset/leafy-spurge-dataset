@@ -158,6 +158,7 @@ If you use our dataset, you can support our work by citing our benchmark paper.
 ```
 @misc{Doherty2024LeafySpurgeDataset,
   title={Leafy Spurge Dataset: Real-world Weed Classification Within Aerial Drone Imagery},
+  howpublished={https://leafy-spurge-dataset.github.io/static/paper.pdf},
   author={
 Kyle Doherty,
 Max Gurinas,

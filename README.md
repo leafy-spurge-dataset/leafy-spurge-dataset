@@ -123,7 +123,6 @@ python leafy_spurge_plot_results.py \
 <br />
 <img src="./images/plot.png" width="400" />
 <br />
-<br />
 
 This will create a file `plot.png` (shown above) that visualizes the validation accuracy per epoch. If you have multiple runs, changing to `--csv_file_name */data.csv` will use `glob` to load multiple `data.csv` files, and the resulting `plot.png` will contain a legend if more than one method is present.
 

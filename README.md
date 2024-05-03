@@ -39,7 +39,7 @@ print(dataset[0])
 
 ```
 
-Available splits are `train`, `test`. Available versions are `crop` (`39x39`), `context` (`1024x1024`).
+Available splits are `train`, `test`. Available versions are `crop` (39x39), `context` (1024x1024).
 
 Iterating through the dataset returns tuples of `PIL.Image.Image` and a class label. Additional metadata is available for each training example, including example idx, latitude, longitude, easting, northing, elevation, time, and plant cluster id. These can be returned by the dataset by setting `output_dict=True` as below:
 
@@ -57,7 +57,7 @@ print(dataset[0])
 
 ```
 
-Our `LeafySpurgeDataset` is compatible with the PyTorch DataLoader, and transforms. The following example shows how to load random batches of 32 images from the 🌱 Leafy Spurge training set, at resolution `224x224`, normalized using ImageNet statistics.
+Our `LeafySpurgeDataset` is compatible with the PyTorch DataLoader, and transforms. The following example shows how to load random batches of 32 images from the 🌱 Leafy Spurge training set, at resolution 224x224, normalized using ImageNet statistics.
 
 ```python
 from leafy_spurge_dataset import LeafySpurgeDataset

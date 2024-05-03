@@ -77,7 +77,6 @@ transform = v2.Compose([
 train_dataset = LeafySpurgeDataset(
     split="train",
     version="crop",
-    output_dict=True,
     transform=transform,
 )
 

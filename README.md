@@ -7,7 +7,7 @@
 
 __Leafy Spurge Dataset__ is a challenging real-world benchmark to galvanize efforts to find and remove invasive plants within drone imagery of the Montana prairie, and restore natural ecosystems in Montana.
 
-[Paper](https://leafy-spurge-dataset.github.io/static/paper.pdf) &nbsp;&nbsp;|&nbsp;&nbsp; [Website](https://leafy-spurge-dataset.github.io) &nbsp;&nbsp;|&nbsp;&nbsp; [HuggingFace](https://huggingface.co/datasets/mpg-ranch/leafy_spurge) &nbsp;&nbsp;|&nbsp;&nbsp; [Data Augmentation](https://arxiv.org/abs/2302.07944)
+[Paper](https://leafy-spurge-dataset.github.io/static/paper.pdf) &nbsp;&nbsp;|&nbsp;&nbsp; [Website](https://leafy-spurge-dataset.github.io) &nbsp;&nbsp;|&nbsp;&nbsp; [HuggingFace](https://huggingface.co/datasets/mpg-ranch/leafy_spurge) &nbsp;&nbsp;|&nbsp;&nbsp; [🌱 Leafy Spurge + Data Augmentation](https://arxiv.org/abs/2302.07944)
 
 ## Installation
 

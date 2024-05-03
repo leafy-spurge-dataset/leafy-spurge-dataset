@@ -156,7 +156,7 @@ These can reproduce the results in our paper, without you writing a single line 
 
 If you use our dataset, you can support our work by citing our benchmark paper.
 
-```
+```bibtex
 @misc{Doherty2024LeafySpurgeDataset,
   title={Leafy Spurge Dataset: Real-world Weed Classification Within Aerial Drone Imagery},
   howpublished={https://leafy-spurge-dataset.github.io/static/paper.pdf},
@@ -175,7 +175,7 @@ Ruslan Salakhutdinov},
 
 And our paper on few-shot learning with 🌱 Leafy Spurge Dataset.
 
-```
+```bibtex
 @misc{Trabucco2023DataAugmentation,
       title={Effective Data Augmentation With Diffusion Models}, 
       author={

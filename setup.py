@@ -16,7 +16,7 @@ VERSION = '1.0'
 
 DOWNLOAD_URL = (
     f'{REPOSITORY_URL}/archive/'
-    f'{VERSION.replace(".", "_")}.tar.gz'
+    f'v{VERSION.replace(".", "_")}.tar.gz'
 )
 
 CLASSIFIERS = [

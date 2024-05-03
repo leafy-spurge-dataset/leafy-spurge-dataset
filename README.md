@@ -39,7 +39,9 @@ print(dataset[0])
 
 ```
 
-Available splits are `train`, `test`, and available versions are `crop` for `39x39` cropped images and `context` for `1024x1024` full images.
+Available splits are `train`, `test`.
+
+Available versions are `crop` for `39x39` images and `context` for `1024x1024` images.
 
 Iterating through the dataset returns tuples of `PIL.Image.Image` and a class label. Additional metadata is available for each training example, including example idx, latitude, longitude, easting, northing, elevation, time, and plant cluster id. These can be returned by the dataset by setting `output_dict=True` as below:
 

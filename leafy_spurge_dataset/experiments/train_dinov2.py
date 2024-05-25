@@ -36,7 +36,7 @@ def train(args: argparse.Namespace):
 
     # data augmentation and normalization
 
-    transform = v2.Compose([
+    train_transform = v2.Compose([
         v2.RandomApply(
             [v2.ColorJitter(
                 brightness=0.8,
@@ -58,43 +58,66 @@ def train(args: argparse.Namespace):
         ),
     ])
 
+    test_transform = v2.Compose([
+        v2.Resize(size=(224, 224), antialias=True),
+        v2.ToImage(),
+        v2.ToDtype(torch.float32, scale=True),
+        v2.Normalize(
+            mean=[0.485, 0.456, 0.406],
+            std=[0.229, 0.224, 0.225],
+        ),
+    ])
+
     # load the Leafy Spurge dataset
 
     train_dataset = LeafySpurgeDataset(
-        version='crop',
+        version=args.dataset_version,
         split='train',
-        transform=transform,
+        transform=train_transform,
         output_dict=False,
+        examples_per_class=args.examples_per_class,
+        seed_subset=args.seed,
+        invert_subset=False,
     )
+    
+    if args.examples_per_class is not None:
+
+        val_dataset = LeafySpurgeDataset(
+            version=args.dataset_version,
+            split='train',
+            transform=test_transform,
+            output_dict=False,
+            examples_per_class=args.examples_per_class,
+            seed_subset=args.seed,
+            invert_subset=True,
+        )
+
+    else:  # use 20% of the training data for validation
+
+        train_dataset_size = len(train_dataset)
+        val_split_size = int(0.2 * train_dataset_size)
+        train_split_size = train_dataset_size - val_split_size
+
+        train_dataset, val_dataset = random_split(
+            train_dataset, (train_split_size, val_split_size))
 
     test_dataset = LeafySpurgeDataset(
-        version='crop',
+        version=args.dataset_version,
         split='test',
-        transform=transform,
+        transform=test_transform,
         output_dict=False,
-    )
-
-    # split the dataset into train and validation subsets
-
-    train_dataset_size = len(train_dataset)
-    val_subset_size = int(0.2 * train_dataset_size)
-    train_subset_size = train_dataset_size - val_subset_size
-
-    train_subset, val_subset = random_split(
-        train_dataset,
-        (train_subset_size, val_subset_size),
     )
 
     # create dataloaders for training, validation, and testing
 
     train_dataloader = DataLoader(
-        train_subset,
+        train_dataset,
         batch_size=args.batch_size,
         shuffle=True,
     )
 
     val_dataloader = DataLoader(
-        val_subset,
+        val_dataset,
         batch_size=args.batch_size,
         shuffle=False,
     )
@@ -195,7 +218,7 @@ def train(args: argparse.Namespace):
 
         train_accuracy = (
             train_accuracy / 
-            len(train_subset)
+            len(train_dataset)
         )
 
         if accelerator.is_main_process:
@@ -234,7 +257,7 @@ def train(args: argparse.Namespace):
 
         val_accuracy = (
             val_accuracy / 
-            len(val_subset)
+            len(val_dataset)
         )
 
         if accelerator.is_main_process:
@@ -334,6 +357,21 @@ def train(args: argparse.Namespace):
 
 
 def add_train_args(parser: argparse.ArgumentParser):
+
+    parser.add_argument(
+        "--dataset_version",
+        type=str,
+        default="crop",
+        help="Version of the dataset to use",
+        choices=["crop", "context"],
+    )
+
+    parser.add_argument(
+        "--examples_per_class",
+        type=int,
+        default=None,
+        help="Number of examples per class",
+    )
 
     parser.add_argument(
         "--batch_size",

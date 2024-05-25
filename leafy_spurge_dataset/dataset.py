@@ -3,6 +3,8 @@ from torch.utils.data import Dataset
 from torchvision.datasets.vision import StandardTransform
 from datasets import load_dataset
 
+import numpy as np
+
 
 DATASET_PATH = 'mpg-ranch/leafy_spurge'
 
@@ -17,11 +19,15 @@ class LeafySpurgeDataset(Dataset):
                  transforms: Optional[Callable] = None,
                  transform: Optional[Callable] = None,
                  target_transform: Optional[Callable] = None,
-                 output_dict: bool = False):
+                 output_dict: bool = False,
+                 examples_per_class: Optional[int] = None,
+                 seed_subset: Optional[int] = None,
+                 invert_subset: Optional[bool] = None):
         
         super(LeafySpurgeDataset, self).__init__()
 
         self.output_dict = output_dict
+        self.examples_per_class = examples_per_class
 
         has_transforms = transforms is not None
         has_separate_transform = (
@@ -58,6 +64,36 @@ class LeafySpurgeDataset(Dataset):
             class_id: class_name
             for class_id, class_name in enumerate(self.class_names)
         }
+
+        if examples_per_class is not None:
+
+            # select a few-shot subset of the dataset
+            
+            generator = np.random.default_rng(seed_subset)
+            class_labels = np.asarray(
+                self.huggingface_dataset['label'])
+
+            subset_indices = []
+            
+            for class_id in range(self.num_classes):
+
+                class_indices = generator.choice(
+                    np.nonzero(class_labels == class_id)[0],
+                    size=examples_per_class,
+                    replace=False)
+                subset_indices.extend(class_indices)
+
+            if invert_subset:
+
+                subset_indices = np.setdiff1d(
+                    np.arange(len(class_labels)),
+                    subset_indices)
+
+            self.huggingface_dataset = (
+                self.huggingface_dataset.select(
+                    subset_indices
+                )
+            )
 
     def __len__(self) -> int:
 

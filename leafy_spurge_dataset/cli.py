@@ -1,7 +1,7 @@
-from leafy_spurge_dataset.plot import (
+from leafy_spurge_dataset.experiments.plot import (
     plot, add_plot_args
 )
-from leafy_spurge_dataset.train import (
+from leafy_spurge_dataset.experiments.train_dinov2 import (
     train, add_train_args
 )
 
@@ -13,7 +13,8 @@ def quickstart(args: argparse.Namespace):
 
     input_file_name = os.path.join(
         os.path.dirname(__file__),
-        "train.py",
+        "experiments",
+        "train_dinov2.py",
     )
 
     with open(input_file_name, "r") as g:
@@ -22,6 +23,7 @@ def quickstart(args: argparse.Namespace):
 
     input_file_name = os.path.join(
         os.path.dirname(__file__),
+        "experiments",
         "plot.py",
     )
 

@@ -59,6 +59,7 @@ DEPENDENCIES = [
     'pandas',
     'matplotlib',
     'seaborn',
+    'openai'
 ]
 
 

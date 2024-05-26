@@ -22,7 +22,8 @@ class LeafySpurgeDataset(Dataset):
                  output_dict: bool = False,
                  examples_per_class: Optional[int] = None,
                  seed_subset: Optional[int] = None,
-                 invert_subset: Optional[bool] = None):
+                 invert_subset: Optional[bool] = None,
+                 override_dataset_length: Optional[int] = None):
         
         super(LeafySpurgeDataset, self).__init__()
 
@@ -95,13 +96,19 @@ class LeafySpurgeDataset(Dataset):
                 )
             )
 
+        self.dataset_length = (
+            override_dataset_length 
+            or len(self.huggingface_dataset)
+        )
+
     def __len__(self) -> int:
 
-        return len(self.huggingface_dataset)
+        return self.dataset_length
 
     def __getitem__(self, idx: int) -> Union[Dict[str, Any], Tuple[Any, Any]]:
 
-        sample = self.huggingface_dataset[idx]
+        sample = self.huggingface_dataset[
+            idx % len(self.huggingface_dataset)]
 
         image = sample.pop('image').convert('RGB')
         label = sample.pop('label')

@@ -1,8 +1,11 @@
 from leafy_spurge_dataset.experiments.plot import (
     plot, add_plot_args
 )
-from leafy_spurge_dataset.experiments.train_dinov2 import (
+from leafy_spurge_dataset.experiments.train_classifier import (
     train, add_train_args
+)
+from leafy_spurge_dataset.experiments.evaluate_openai import (
+    evaluate, add_evaluate_args
 )
 
 import argparse
@@ -14,11 +17,21 @@ def quickstart(args: argparse.Namespace):
     input_file_name = os.path.join(
         os.path.dirname(__file__),
         "experiments",
-        "train_dinov2.py",
+        "train_classifier.py",
     )
 
     with open(input_file_name, "r") as g:
         with open(args.output_train_file_name, "w") as f:
+            f.write(g.read())
+
+    input_file_name = os.path.join(
+        os.path.dirname(__file__),
+        "experiments",
+        "evaluate_openai.py",
+    )
+
+    with open(input_file_name, "r") as g:
+        with open(args.output_evaluate_file_name, "w") as f:
             f.write(g.read())
 
     input_file_name = os.path.join(
@@ -42,6 +55,13 @@ def add_quickstart_args(parser: argparse.ArgumentParser):
     )
 
     parser.add_argument(
+        "--output_evaluate_file_name",
+        type=str,
+        default="leafy_spurge_evaluate_openai.py",
+        help="Name of the output file",
+    )
+
+    parser.add_argument(
         "--output_plot_file_name",
         type=str,
         default="leafy_spurge_plot_results.py",
@@ -57,6 +77,7 @@ FUNCTIONS = {
     "quickstart": quickstart,
     "plot": plot,
     "train": train,
+    "evaluate": evaluate,
 }
 
 
@@ -71,6 +92,7 @@ def entry_point():
     add_plot_args(subparsers.add_parser("plot"))
     add_train_args(subparsers.add_parser("train"))
     add_quickstart_args(subparsers.add_parser("quickstart"))
+    add_evaluate_args(subparsers.add_parser("evaluate"))
 
     args = parser.parse_args()
     FUNCTIONS[args.command_name](args)

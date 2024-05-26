@@ -1,0 +1,32 @@
+#!/bin/bash
+#SBATCH --job-name=leafy-spurge
+#SBATCH --exclude=matrix-1-12,matrix-0-24,matrix-1-4,matrix-1-8,matrix-1-18,matrix-1-20,matrix-0-34,matrix-1-16,matrix-0-38,matrix-1-6,matrix-2-5,matrix-1-10,matrix-2-21,matrix-2-1
+#SBATCH --time=72:00:00
+#SBATCH --nodes=1
+#SBATCH --partition=russ_reserved
+#SBATCH --cpus-per-task=1
+#SBATCH --mem=4g
+#SBATCH --output=/home/btrabucc/leafy-spurge-dataset/logs/log-%A-%a-%N.out
+#SBATCH --error=/home/btrabucc/leafy-spurge-dataset/logs/err-%A-%a-%N.out
+#SBATCH --mail-type=END
+#SBATCH --mail-user=btrabucc@andrew.cmu.edu
+
+source ~/anaconda3/etc/profile.d/conda.sh
+conda activate leafy-spurge
+cd ~/leafy-spurge-dataset
+
+if [ -z "${EXAMPLES_PER_CLASS+xxx}" ]; then echo "EXAMPLES_PER_CLASS is not set" && exit 1; fi
+if [ -z "${RANDOM_SEED+xxx}" ]; then echo "RANDOM_SEED is not set" && exit 1; fi
+if [ -z "${MODEL+xxx}" ]; then echo "MODEL is not set" && exit 1; fi
+if [ -z "${DATASET_VERSION+xxx}" ]; then echo "DATASET_VERSION is not set" && exit 1; fi
+
+OUTPUT_DIR="/projects/rsalakhugroup/btrabucc/leafy-spurge-results-openai/version=$DATASET_VERSION-model=$MODEL-n=$EXAMPLES_PER_CLASS-seed=$RANDOM_SEED"
+
+python -u -m leafy_spurge_dataset.experiments.evaluate_openai \
+    --dataset_version $DATASET_VERSION \
+    --openai_model_name $MODEL \
+    --examples_per_class $EXAMPLES_PER_CLASS \
+    --evaluations_per_class 32 \
+    --image_resolution 256 \
+    --seed $RANDOM_SEED \
+    --output_dir $OUTPUT_DIR
